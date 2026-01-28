@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  super_admin
+  store_owner
+  usuario
+}
+
+enum ReservationStatus {
+  pending
+  confirmed
+  cancelled
+  completed
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  password          String?
+  displayName       String
+  role              UserRole @default(usuario)
+  storeId           String?  @unique
+  mustChangePassword Boolean @default(false)
+  active            Boolean  @default(true)
+  googleId          String?  @unique
+  facebookId        String?  @unique
+  avatar            String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  ownedStore        Store?        @relation("StoreOwner")
+  reservations      Reservation[]
+  chats             Chat[]
+  sentMessages      Message[]
+  createdStores     Store[]       @relation("CreatedBy")
+
+  @@index([email])
+  @@index([role])
+  @@index([googleId])
+  @@index([facebookId])
+}
+
+model Store {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  location    String
+  phone       String?
+  city        String   @default("Pasto")
+  department  String   @default("Nariño")
+  country     String   @default("Colombia")
+  active      Boolean  @default(true)
+  ownerId     String?  @unique
+  createdBy   String
+  latitude    Float?
+  longitude   Float?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User?    @relation("StoreOwner", fields: [ownerId], references: [storeId])
+  creator     User     @relation("CreatedBy", fields: [createdBy], references: [id])
+  courts      Court[]
+  chats       Chat[]
+
+  @@index([active])
+  @@index([ownerId])
+  @@index([latitude, longitude])
+}
+
+model Court {
+  id          String   @id @default(uuid())
+  storeId     String
+  name        String
+  description String?
+  type        String
+  surface     String?
+  pricePerHour Decimal @db.Decimal(10, 2)
+  capacity    Int      @default(10)
+  active      Boolean  @default(true)
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  store        Store           @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+  schedules    CourtSchedule[]
+
+  @@index([storeId])
+  @@index([active])
+}
+
+model CourtSchedule {
+  id          String   @id @default(uuid())
+  courtId     String
+  dayOfWeek   Int      // 0=Domingo, 1=Lunes, ..., 6=Sábado
+  startTime   String   // Formato "HH:mm" (ej: "08:00")
+  endTime     String   // Formato "HH:mm" (ej: "22:00")
+  slotDuration Int     @default(60) // Duración de cada slot en minutos (30, 60, 90, etc.)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  court       Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@index([courtId])
+  @@index([dayOfWeek])
+  @@unique([courtId, dayOfWeek, startTime, endTime])
+}
+
+model Reservation {
+  id          String            @id @default(uuid())
+  courtId     String
+  userId      String
+  date        DateTime
+  startTime   String
+  endTime     String
+  status      ReservationStatus @default(pending)
+  totalPrice  Decimal           @db.Decimal(10, 2)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  court       Court             @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id])
+
+  @@index([courtId])
+  @@index([userId])
+  @@index([date])
+  @@index([status])
+}
+
+model Chat {
+  id            String   @id @default(uuid())
+  storeId       String
+  userId        String
+  lastMessage   String?
+  lastMessageAt DateTime?
+  unreadCount   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  store         Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id])
+  messages      Message[]
+
+  @@unique([storeId, userId])
+  @@index([storeId])
+  @@index([userId])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  senderId  String
+  text      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender    User     @relation(fields: [senderId], references: [id])
+
+  @@index([chatId])
+  @@index([senderId])
+  @@index([createdAt])
+}
