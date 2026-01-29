@@ -1,8 +1,8 @@
 <script>
-	import { goto } from '\/navigation';
-import { API_URL } from '\/config' from '$app/navigation';
+	import { goto } from '\$app/navigation';
+	import { API_URL } from '\$lib/config';
 	import { onMount } from 'svelte';
-import { API_URL } from '\/config' from 'svelte';
+	import { API_URL } from '\$lib/config';
 
 	let user = null;
 	let loading = false;

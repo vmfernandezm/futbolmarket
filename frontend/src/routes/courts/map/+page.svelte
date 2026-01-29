@@ -1,7 +1,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { goto } from '\/navigation';
-import { API_URL } from '\/config' from '$app/navigation';
+	import { goto } from '\$app/navigation';
+	import { API_URL } from '\$lib/config';
 
 	let map;
 	let L;
