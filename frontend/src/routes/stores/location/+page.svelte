@@ -1,8 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { API_URL } from '\$lib/config';
-	import { goto } from '\$app/navigation';
-	import { API_URL } from '\$lib/config';
+	import { goto } from '$app/navigation';
+	import { API_URL } from '$lib/config';
 	import LocationPicker from '$lib/components/LocationPicker.svelte';
 
 	let user = null;

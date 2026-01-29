@@ -1,8 +1,7 @@
 <script>
-	import { goto } from '\$app/navigation';
-	import { API_URL } from '\$lib/config';
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { API_URL } from '\$lib/config';
+	import { API_URL } from '$lib/config';
 
 	let user = null;
 	let stores = [];
