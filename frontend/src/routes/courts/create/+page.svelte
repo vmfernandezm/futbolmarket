@@ -1,6 +1,8 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 	import { onMount } from 'svelte';
+import { API_URL } from '\/config' from 'svelte';
 	import LocationPicker from '$lib/components/LocationPicker.svelte';
 	import ScheduleConfig from '$lib/components/ScheduleConfig.svelte';
 
@@ -75,7 +77,7 @@
 			const formData = new FormData();
 			formData.append('image', file);
 
-			const response = await fetch('http://localhost:3001/api/upload/image', {
+			const response = await fetch('${API_URL}/api/upload/image', {
 				method: 'POST',
 				headers: {
 					'Authorization': `Bearer ${token}`
@@ -119,7 +121,7 @@
 
 			// Primero, actualizar la ubicación del store
 			if (user.storeId) {
-				await fetch(`http://localhost:3001/api/stores/${user.storeId}/location`, {
+				await fetch(`${API_URL}/api/stores/${user.storeId}/location`, {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
@@ -134,7 +136,7 @@
 			}
 
 			// Luego, crear la cancha
-			const response = await fetch('http://localhost:3001/api/courts', {
+			const response = await fetch('${API_URL}/api/courts', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -159,7 +161,7 @@
 
 				// Guardar horarios si hay configurados
 				if (schedules.length > 0) {
-					const scheduleResponse = await fetch(`http://localhost:3001/api/courts/${courtId}/schedules`, {
+					const scheduleResponse = await fetch(`${API_URL}/api/courts/${courtId}/schedules`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
@@ -373,7 +375,7 @@
 										<div class="d-flex align-items-center justify-content-between">
 											<div class="d-flex align-items-center">
 												<img 
-													src={`http://localhost:3001${imageUrl}`} 
+													src={`${API_URL}${imageUrl}`} 
 													alt="Preview" 
 													class="rounded"
 													style="width: 100px; height: 100px; object-fit: cover;"

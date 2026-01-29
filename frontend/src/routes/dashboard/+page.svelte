@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+import { API_URL } from '\/config' from 'svelte';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 
 	let user = null;
 	let loading = true;
@@ -29,7 +31,7 @@
 	async function loadCourts() {
 		try {
 			loadingCourts = true;
-			const response = await fetch('http://localhost:3001/api/courts');
+			const response = await fetch('${API_URL}/api/courts');
 			const data = await response.json();
 			courts = data.courts || [];
 		} catch (err) {
@@ -259,7 +261,7 @@
 								<!-- Imagen -->
 								{#if court.imageUrl}
 									<img 
-										src={`http://localhost:3001${court.imageUrl}`} 
+										src={`${API_URL}${court.imageUrl}`} 
 										alt={court.name}
 										class="card-img-top"
 										style="height: 200px; object-fit: cover;"

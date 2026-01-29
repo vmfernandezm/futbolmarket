@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+import { API_URL } from '\/config' from 'svelte';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 	import LocationPicker from '$lib/components/LocationPicker.svelte';
 
 	let user = null;
@@ -43,7 +45,7 @@
 	async function loadStore() {
 		try {
 			const token = localStorage.getItem('token');
-			const response = await fetch(`http://localhost:3001/api/stores/${user.storeId}`, {
+			const response = await fetch(`${API_URL}/api/stores/${user.storeId}`, {
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
@@ -84,7 +86,7 @@
 		try {
 			const token = localStorage.getItem('token');
 
-			const response = await fetch(`http://localhost:3001/api/stores/${user.storeId}/location`, {
+			const response = await fetch(`${API_URL}/api/stores/${user.storeId}/location`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',

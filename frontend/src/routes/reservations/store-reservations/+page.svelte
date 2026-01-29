@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+import { API_URL } from '\/config' from 'svelte';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 
 	let user = null;
 	let reservations = [];
@@ -34,7 +36,7 @@
 			loading = true;
 			const token = localStorage.getItem('token');
 
-			const response = await fetch('http://localhost:3001/api/reservations/store-reservations', {
+			const response = await fetch('${API_URL}/api/reservations/store-reservations', {
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
@@ -60,7 +62,7 @@
 			loadingStats = true;
 			const token = localStorage.getItem('token');
 
-			const response = await fetch('http://localhost:3001/api/reservations/store-stats', {
+			const response = await fetch('${API_URL}/api/reservations/store-stats', {
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
@@ -93,7 +95,7 @@
 			updatingId = reservationId;
 			const token = localStorage.getItem('token');
 
-			const response = await fetch(`http://localhost:3001/api/reservations/${reservationId}/status`, {
+			const response = await fetch(`${API_URL}/api/reservations/${reservationId}/status`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',

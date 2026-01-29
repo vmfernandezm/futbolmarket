@@ -1,6 +1,7 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 
 	let map;
 	let L;
@@ -89,7 +90,7 @@
 	async function loadNearbyCourts() {
 		try {
 			loading = true;
-			let url = `http://localhost:3001/api/courts/nearby?lat=${userLocation.latitude}&lng=${userLocation.longitude}&radius=${radius}`;
+			let url = `${API_URL}/api/courts/nearby?lat=${userLocation.latitude}&lng=${userLocation.longitude}&radius=${radius}`;
 			
 			if (selectedType) {
 				url += `&type=${encodeURIComponent(selectedType)}`;
@@ -118,7 +119,7 @@
 	async function loadAllCourts() {
 		try {
 			loading = true;
-			const response = await fetch('http://localhost:3001/api/courts/map');
+			const response = await fetch('${API_URL}/api/courts/map');
 			const data = await response.json();
 
 			if (response.ok) {

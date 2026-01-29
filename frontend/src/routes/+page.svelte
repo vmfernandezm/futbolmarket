@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { API_URL } from '$lib/config';
 
 	let courts = [];
 	let stores = [];
@@ -26,7 +27,7 @@
 	async function loadCourts() {
 		try {
 			loading = true;
-			const response = await fetch('http://localhost:3001/api/courts');
+			const response = await fetch(`${API_URL}/api/courts`);
 			const data = await response.json();
 			courts = data.courts || [];
 		} catch (err) {
@@ -40,7 +41,7 @@
 	async function loadStores() {
 		try {
 			loading = true;
-			const response = await fetch('http://localhost:3001/api/stores');
+			const response = await fetch(`${API_URL}/api/stores`);
 			const data = await response.json();
 			stores = data.stores || [];
 		} catch (err) {

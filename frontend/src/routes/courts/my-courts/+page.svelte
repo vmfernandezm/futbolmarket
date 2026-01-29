@@ -1,6 +1,8 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 	import { onMount } from 'svelte';
+import { API_URL } from '\/config' from 'svelte';
 
 	let user = null;
 	let courts = [];
@@ -31,7 +33,7 @@
 			loading = true;
 			const token = localStorage.getItem('token');
 			
-			const response = await fetch('http://localhost:3001/api/courts/my-courts', {
+			const response = await fetch('${API_URL}/api/courts/my-courts', {
 				headers: {
 					'Authorization': `Bearer ${token}`
 				}
@@ -59,7 +61,7 @@
 
 		try {
 			const token = localStorage.getItem('token');
-			const response = await fetch(`http://localhost:3001/api/courts/${courtId}`, {
+			const response = await fetch(`${API_URL}/api/courts/${courtId}`, {
 				method: 'DELETE',
 				headers: {
 					'Authorization': `Bearer ${token}`
@@ -186,7 +188,7 @@
 							<!-- Imagen -->
 							{#if court.imageUrl}
 								<img 
-									src={`http://localhost:3001${court.imageUrl}`} 
+									src={`${API_URL}${court.imageUrl}`} 
 									alt={court.name}
 									class="card-img-top"
 									style="height: 200px; object-fit: cover;"

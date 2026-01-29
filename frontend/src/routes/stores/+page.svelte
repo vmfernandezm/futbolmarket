@@ -1,6 +1,8 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { goto } from '\/navigation';
+import { API_URL } from '\/config' from '$app/navigation';
 	import { onMount } from 'svelte';
+import { API_URL } from '\/config' from 'svelte';
 
 	let user = null;
 	let stores = [];
@@ -29,7 +31,7 @@
 	async function loadStores() {
 		try {
 			loading = true;
-			const response = await fetch('http://localhost:3001/api/stores');
+			const response = await fetch('${API_URL}/api/stores');
 			const data = await response.json();
 
 			if (response.ok) {
@@ -52,7 +54,7 @@
 
 		try {
 			const token = localStorage.getItem('token');
-			const response = await fetch(`http://localhost:3001/api/stores/${storeId}`, {
+			const response = await fetch(`${API_URL}/api/stores/${storeId}`, {
 				method: 'DELETE',
 				headers: {
 					'Authorization': `Bearer ${token}`
